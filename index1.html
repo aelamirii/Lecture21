@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" ng-app = "ControllerAsApp">
+  <head>
+    <meta charset="utf-8">
+    <script src = "angular.min.js"></script>
+    <script src = "app1.js"></script>
+    <title> Custom Service with Factory </title>
+  </head>
+  <body>
+    <h1>  Custom Service with Factory  </h1>
+
+<!-- List Shopping with undefined Items count -->
+    <div class="list1" ng-controller = "ShoppingListController1 as list1">
+
+      <input type="text" ng-model = "list1.ItemName" placeholder="Item Name">
+      <input type="text" ng-model = "list1.ItemQuantity" placeholder="Item Quantity">
+      <button type="button" ng-click = "list1.addItem();">Add a new Item</button>
+
+      <ol>
+        <li ng-repeat = "item in list1.getItems">
+          {{ item.quantity }} of {{ item.name }}
+          <button type="button" ng-click = "list1.RemoveItem($index);">Remove Item</button>
+        </li>
+      </ol>
+      <div class=""> Error : {{ list1.errorMessage}}</div>
+    </div>
+
+
+<!-- Shopping List with limited Items to 3 -->
+      <div ng-controller = "ShoppingListController2 as list2">
+
+        <input type="text" ng-model = "list2.ItemName" placeholder = "Item Name">
+        <input type="text" ng-model = "list2.ItemQuantity" placeholder = "Item Quantity">
+        <button type="button" ng-click = "list2.addItem(3);">Add a new Item</button>
+
+        <ol>
+          <li ng-repeat = "item in list2.getItems">
+            {{ list2.quantity }} of {{ list2.name }}
+            <button type="button" ng-click = "list2.RemoveItem($index);">Remove Item</button>
+          </li>
+        </ol>
+
+        <div>
+          Error : {{ list2.errorMessage }}
+        </div>
+
+      </div>
+
+
+
+
+
+  </body>
+</html>
