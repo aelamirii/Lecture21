@@ -1,0 +1,114 @@
+[SOUND]
+Okay, I'm back in my code editor and
+I'm located in lecture 21 folder, which is located in
+fullstack-course5 examples folder. And this is a similar application
+to what we've written before. In other words, we're going to
+be creating a shopping list, except now we're going to be creating
+two separate independent shopping lists, that are going to be sitting side by side. So we're going to need a shopping list
+service, but we don't want it to be a singleton anymore, because we don't want
+one shopping list affecting the other one. So the way we're going to do that is,
+basically create two separate controllers. One is going to be responsible for
+list one, shopping list one, and the other one is going to be
+responsible for shopping list two. Except we want to enhance the shopping
+list service just a little bit. We want to be able to tell the shopping
+list service that there might be a max number of items that we might
+asked it to limit itself to. Obviously, we're going to be creating the
+shopping list service using the factory because in every single controller,
+we need to create a new one, and sometimes we'll need to create one
+that doesn't have a max item limit and sometimes it will have a max item limit. So let's go to our app.gs and
+see how we did that. The first thing we want to do
+is actually scroll down to our shopping list service and
+modify it a little bit. In this case, we want to specify that
+there might be a max number of items that we want to limit
+the shopping list too. So the code is always identical except for
+the services.addItem method. And in this case, just before adding
+our item we actually need to check. If the max items is undefined,
+which means the color of our service didn't want bother to redefine
+the max number of items. In which case, we're going to go ahead and assume that there is no max items,
+it's unlimited. And we'll go ahead and
+push the item onto our list. Or we have to check if there's, in fact, a max items specified,
+meaning it's not undefined. We need to check that
+the number of items in our list is less than the number
+of max items allowed. And if that is the case, we can then, go ahead and add that item to the item
+list, that our items are right. If this condition is false, then we're
+going to have to throw an error, and here you see an example of throwing an error,
+an error is a built in JavaScript class. And we'll give it a message, max items of
+max items is reached, so the user knows, so the user of this service knows,
+that we've reached our limit. Everything else about the service is
+exactly the same as we've done before. Now we need to create the factory. Well the first thing we need to do
+is to scroll all the way up and look at our factory declaration. So the factory declaration is dot factory. We're going to give it the factory name,
+which is our shopping list factory, and the function that is going to
+be our factory function. Which is in this case again
+shopping list factory. Note, that we don't need to
+register the shopping list service here within that service method. That's because we don't want angular to
+create the shopping with service for us. We want to create that service ourselves. Let's go ahead and
+scroll to the shopping list factory, and you can see it's very simple and
+you can see also that we're using kind of the function approach here
+instead of the object literal approach. And our factory is a function that takes
+the max number of items, and it will return a new shopping list service,
+passing it the max number of items. And so, what will get returned as part
+of the execution of the shopping list factory is a function that takes
+these max number of items and returns the shopping list list service. Now all it's left is take a look
+at the code of the controllers. Let's go ahead and scroll up to the first
+controller which is called list one, that's how we nicknamed
+it in our template, cus we are using a controller as syntax. You can see that we're injecting
+the shopping list factory into our shopping list controller one. And in order for us to get a new shopping
+list, you could see that we're using our shopping list factory and
+simply executing it. Note, we're not passing anything into it, which means the max number of
+items is going to be undefined. But since the shopping list factory refers
+to a function that is being returned out of it, putting parentheses behind
+it will execute that function and will execute the new
+shopping list service. And that's why we have shopping
+list as our local variable here, as an instance of
+the shopping list service. Once we have that, we obviously can
+now start calling methods on it. Like getItems and
+you could see here when we add the item, we could just say shoppingList.addItem,
+list1.itemName, list1.itemQuantity. So very similar to the way
+we used it before. In the shopping list controller two,
+you can see the where likewise injecting the ShoppingListFactory
+into the ShoppingListController2. But this time when we execute
+the ShoppingListFactory we pass it the max number of item is this three. Which means that our shopping list,
+the local variable, the shopping list that's referred to the
+shoppingList service is now going to be limited to three items only. So therefore, we need to change
+our add item method slightly. We need to make sure that if an error
+is being thrown from our shoppingList, that we catch it and
+do something about it. Well, that's the tri catch block that
+you see here that exist in Java Script. So we're going to try to add the item. And if the number of items in the shopping
+list is going to exceed three, it will throw an error. In which case,
+we're going to catch that error. And we're actually going to set
+a property on our scope, or really on the instance of our controller, since
+we're using the controller as syntax. That is going to get exposed
+to our HTML template. And we're going to set the value of our
+error message, to error that message. That is going to come from that error that
+we threw from this shopping list service. Okay, let's save all that, and since I have my browser sync running,
+let's go to the browser and take a look. So we basically have both
+shopping lists side by side. And we could start filling it out. So we'll fill it out with cookies again. Three bags of cookies, and
+we'll say we want chips. We'll get four bags of that,
+four bags of that. And we'll say, sugary drinks. We'll get ten bottles of that. And we'll say Pepto Bismol,
+we'll get three bottles of that. And as you can see, I was able to add
+the fourth item without any problems. Let's see if we could
+to the same thing for shopping list two, that is supposed
+to be limited to three items. Let's go again and
+say cookies, three bags. And we'll say, chips, four bags,
+let's make it five bags for good measure. And we'll say sugary drink, ten bottles. And we'll say Pepto Bismol, two bottles, look at that. When we add the next item, you could see
+that the error message displayed max item three reached and you could see there's
+only three items in our shopping list. So the point is you could see that
+they're acting independently. The number of items here does not affect
+the number of items here, and also the items are differently, which means
+that is different instance of the shopping list service being used in our controller
+one versus our controller two. Now we do have a little
+bit of an ugliness here, which is this error message that
+is sitting here no matter what. If we refresh here, you'll see that
+the error message is already here. Ideally, we would really like
+it not to show up here at all until an actual error occurs. We'll going to take care of
+that in the future lecture. Let's summarize, the .factory function allows us to
+produce any type of object or function. That includes a service in even
+a singleton, but it's not limited to that. The .service on the other hand,
+is just a more limited factory. It limits us to creating
+a service that is a singleton and also one that's very
+hard to custom configure. The way you invoked the .factory method
+is very similarly to the way invoked the .service or really .controller method. You give it a name and a FactoryFunction. The name you give to your factory is what
+gets injected into other components. The injected factory function
+refers to whatever is returned in the factory function. It can be an object literal with a
+property with a property that's a function that creates something for us. It can also directly be a function
+that itself, creates something for us.

@@ -1,0 +1,89 @@
+[MUSIC] In this lecture we are going to talk
+about creating services, and really, just about anything else
+with the .factory() method. First, it's a good idea to review
+the characteristics of the design pattern, which is what this method is based on. The factory design pattern characteristic
+is basically is that it's a central place that produces new objects or
+functions. Now, this is not an official definition
+of the factory design pattern. But I think it communicates the idea
+without too much of the computer science-y lingo. For our purposes, the point is, is that a factory can produce any
+type of object, not just a singleton. And it can also be used to produce
+dynamically customizable services, which is what we're going to
+end up doing in this lecture. Now there's quite a bit of confusion
+in the AngularJS community regarding factory versus service. After all, the .factory() method is
+sometimes called a service factory, which actually makes sense, because the factory
+is something that can produce a service. But there are some very
+important distinctions. The .factory() method is
+not just another way of creating the same service you create with
+the .service() method, but it can be. The .service() method is
+also called a factory, but a much more limited one compared
+to the .factory() method. The .service() method is a factory that
+always produces the same type of service, a singleton, and without an easy
+way to configure its behavior. That .service() method is
+usually used as a shortcut for something that doesn't require
+any configuration whatsoever. Now the way you register
+the service factory function is very similar to the way we registered
+the service and the controller. You coded that factory
+method on the module. You specify the name of your factory,
+in this case, CustomService. And then you specify the factory function. Now the factory function is
+the thing that's expected to produce a service when you execute it. Note the very big difference. If we made the same exact call
+within that service method, the custom service would be expected to
+be the service, not produce a service as a result of either direct invocation,
+or invocation of one of its methods. Also note that in this example, we name the factory function
+CustomService, and its name that we registered with the .factory()
+method is the same,CustomService. But the truth is, what we name our
+function doesn't make any difference. However, what we register that function
+with, which is what is in the quotation marks, is the name that we use to inject
+into other services, controllers, etc. So it's not the name of the function, it's the name that you register that
+function with with the .factory() method. Now when it comes to writing the factory
+function itself, in this case, the name CustomService function, there's a couple of different
+implementations you could go with. The first one is the one you see here. It's the one that returns a function
+as a result of the execution of our factory function, which is CustomService. As you could see, the local variable that's returned,
+factory, is actually a function value. What we're ultimately after is
+creating a service called SomeService. Note that we're the ones calling new. In other words, we're the ones in
+control of how and what gets created. Once we create whatever we want,
+we could return that as a result. The execution of
+the CustomService function, in other words our factory function,
+itself returns a function because the returned local variable
+factory refers to a function. That's one way of implementing
+this factory function. A different way of implementing
+the factory function would be to return an object literal. Here, we're creating an object literal
+with a property called getSomeService. The value of the property
+getSomeService s a function. So the return value of
+the execution of the CustomService factory is an object literal. We can then retrieve that object
+literal's getSomeService property, whose value is a function, and execute it, obtaining an instance of
+SomeService that we could then use. Even using this implementation, again, we are the ones responsible for
+newing up the service called SomeService. We're in control of how it gets created,
+and that's the biggest point of
+using the .factory() method. So to highlight the differences
+between two equally valid approaches, I've pulled out just the body
+of the factory function. On the left you see one approach, which is an object literal with a property
+method that calls new SomeService(). That object literal is what is
+returned as part of the execution of the factory function. On the right, we are returning a function that returns
+a reference to the new SomeService(). The value of that function, the factory, is what gets returned when you
+execute the factory function itself. There are obviously differences
+in how you use the factory, depending on which
+implementation you chose. If you go with the object literal
+approach, then the way you would use it is by referencing your factory function as
+an object that AngularJS created for you, and then accessing the method
+property which is .getSomeService. Since the CustomService refers to an
+object literal, you would then access one of its properties called getSomeService
+in the same way you would access any property of an object literal
+through the dot notation. However, getSomeService
+property is a function, so in order to execute that function,
+you simply put parens behind it. Once that's done,
+you can then use the service that's produced inside of the function that's
+referenced by the property getSomeService. So it's someSrv.method, and so on. In the case of implementation that
+uses a function as the return value from the factory function,
+unlike the object literal approach, where the custom service factory function
+actually refers to an object literal, in this case,
+CustomService would refer to a function. So all we need to do is
+put parens behind it and execute it in order to
+get our created service. Then use it just like before,
+someSrv.method, and so on. Okay, so now that we understand the
+process of creating these factories, let's go to the code editor and see an example
+of how to create and use these factories. If you have never heard
+of the factory pattern, this overview may be a bit difficult for
+you to digest on the first try. My suggestion is for
+you to move on to part two, see a coding example of these concepts,
+and then come back and watch this video again to grasp
+these concepts on a deeper level.
